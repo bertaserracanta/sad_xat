@@ -1,51 +1,74 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package practica8;
 
-import java.net.*;
 import java.io.*;
-import java.util.concurrent.locks.*;
 
+/**
+ *
+ * @author Berta
+ */
 public class Client {
-    protected MySocket s;
-    protected Lock lk;
-    protected Condition hiHaLinia;
     
-    public Client(InetAddress addr, int port){
-        s = new MySocket(addr, port);
-        lk = new ReentrantLock();
-        hiHaLinia = lk.newCondition();
-        
-        new Thread(new Lectura()).start();
-        new Thread(new Escriptura()).start();
-        
-        
-    }
+    static String nick;
+    static PrintWriter socketout;
+    static BufferedReader socketin;
+    static PrintWriter out = new PrintWriter(System.out);;
+    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     
-    //Thread lector
-    private class Lectura implements Runnable {
-        @Override
-        public void run() {
-            while (s.isReady()){
-                //escriure línia per pantalla;   
-                System.out.print(s.read());
-            }
+    public static void main(String[] args) {
+     
+        try {
+            MySocket s = new MySocket("localhost", 12345);
+            
+            // define in out socket streams
+            socketout = s.getPrintWriter();
+            socketin = s.getBufferedReader();
+            
+            // read and send nick
+            
+            
+            // output thread
+            new Thread() {
+                public void run() {
+                    String msg;
+                    try {
+                        while ((msg = socketin.readLine()) != null) {
+                            // write msg to console
+                            out.println(msg);
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }                
+            }.start();
+            
+            // input thread
+            new Thread() {
+                public void run() {
+                    String linia = null;
+                    try{
+                        linia = in.readLine();
+                    }catch(IOException e){
+                        
+                    }
+                    while (linia != null) {
+                        // write line to socket
+                        s.write(linia);
+                    }
+                    
+                }                
+            }.start();
+            
+            // close socket for output
+            s.close();
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        
-    }
-    
-    //Tread d'escriptura
-    private class Escriptura implements Runnable {
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        String linia = null;
-        
-        @Override
-        public void run() {
-            try{
-            while ((linia = stdIn.readLine()) != null){}
-                //escriure línia per socket;
-                s.write(linia);
-            }catch(IOException e){
-                
-            }
-        }
-        
     }
 }

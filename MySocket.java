@@ -1,3 +1,5 @@
+package practica8;
+
 
 
 import java.io.*;
@@ -5,11 +7,23 @@ import java.net.*;
 
 public class MySocket {
     Socket s;
-     BufferedReader in;
-     PrintWriter out;
-    public MySocket(InetAddress ip,int port){
+    BufferedReader in;
+    PrintWriter out;
+    
+    public MySocket(Socket socket){
         try{
-            s = new Socket(ip, port);
+            s = socket;
+            in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            out = new PrintWriter(s.getOutputStream(), true);
+        }catch(IOException e){
+            System.err.println("Couldn't create the connection");
+            System.exit(1);
+        }
+    }
+    
+    public MySocket(String str, int port){
+        try{
+            s = new Socket(str, port);
             in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             out = new PrintWriter(s.getOutputStream(), true);
         }catch(IOException e){
@@ -35,9 +49,9 @@ public class MySocket {
         }
     }
     
-    public InetAddress getInetAddress(){ //returns the address of the remote machine that is connected to the socket
+    /*public InetAddress getInetAddress(){ //returns the address of the remote machine that is connected to the socket
         return s.getInetAddress();
-    }
+    }*/
     
     
     public int getLocalPort(){
@@ -72,5 +86,14 @@ public class MySocket {
         }
         return ready;
     }
+    
+    public PrintWriter getPrintWriter(){
+        return this.out;
+    }
+    
+    public BufferedReader getBufferedReader(){
+        return this.in;
+    }
+    
     
 }
