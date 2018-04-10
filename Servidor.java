@@ -17,8 +17,8 @@ public class Servidor {
 
     public static void main(String[] args) {
         try {
-            ConcurrentHashMap<String, PrintWriter> m = new ConcurrentHashMap();
-            MyServerSocket ss = new MyServerSocket(9999); //port del servidor
+            ConcurrentHashMap<String, MySocket> m = new ConcurrentHashMap();
+            MyServerSocket ss = new MyServerSocket(12345); //port del servidor
             while (true) {
                 MySocket s = ss.accept(); // retorna socket connectat quan un shi conecta
                 new Thread(new Assistant(s, m)).start();

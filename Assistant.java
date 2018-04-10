@@ -17,7 +17,7 @@ public class Assistant implements Runnable {
     protected PrintWriter sortida;
 
     
-    public Assistant(MySocket so, ConcurrentHashMap<String, PrintWriter> map) {
+    public Assistant(MySocket so, ConcurrentHashMap<String, MySocket> map) {
         s = so;
         m = map;
                 
@@ -35,7 +35,7 @@ public class Assistant implements Runnable {
             nick = entrada.readLine();
             
             // inform users about a new user joining and add user
-            m.put(s, nick);
+            m.put(nick, s);
             sortida.write("L'usuari: " + nick + "s'ha unit");
             
         } catch (Exception ex) {
@@ -46,7 +46,7 @@ public class Assistant implements Runnable {
     public void disconnect() {
         try {
             // remove user and inform users about user leaving
-            m.remove(s);
+            m.remove(nick);
         } catch (Exception ex) {
         }
     }
