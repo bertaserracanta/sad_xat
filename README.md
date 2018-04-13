@@ -1,3 +1,4 @@
 # sad_xat
-how to check if a socket ha received a packet???
+hola ho proves quan puguis i me dises que tal?
+
 
