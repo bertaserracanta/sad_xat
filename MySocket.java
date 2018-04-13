@@ -1,6 +1,3 @@
-package practica8;
-
-
 
 import java.io.*;
 import java.net.*;
@@ -41,32 +38,18 @@ public class MySocket {
         }
     }
     
-    public void connect(SocketAddress addrSocket){
+    public void shutDownInput(){
         try{
-            s.connect(addrSocket);
-        }catch(IOException e){
-            
+            s.shutdownInput();
+        }catch(IOException e){  
         }
     }
     
-    /*public InetAddress getInetAddress(){ //returns the address of the remote machine that is connected to the socket
-        return s.getInetAddress();
-    }*/
-    
-    
-    public int getLocalPort(){
-        return s.getLocalPort();
+    public void println(String str){
+            out.println(str);
     }
     
-    public int getPort(){ //retorna el port al que esta connectat
-        return s.getPort();
-    }
-    
-    public void write(String str){
-            out.print(str);
-    }
-    
-    public String read(){
+    public String readLine(){ 
         String llegit = null;
         try{
             llegit = in.readLine();
@@ -76,24 +59,4 @@ public class MySocket {
         }
         return llegit;
     }
-    
-    public boolean isReady(){
-        boolean ready = false;
-        try{
-            ready = in.ready();
-        }catch(IOException e){
-            
-        }
-        return ready;
-    }
-    
-    public PrintWriter getPrintWriter(){
-        return this.out;
-    }
-    
-    public BufferedReader getBufferedReader(){
-        return this.in;
-    }
-    
-    
 }

@@ -1,72 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package practica8;
 
 import java.io.*;
 
-/**
- *
- * @author Berta
- */
 public class Client {
-    
-    static String nick;
-    static PrintWriter socketout;
-    static BufferedReader socketin;
-    static PrintWriter out = new PrintWriter(System.out);;
-    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-    
     public static void main(String[] args) {
      
         try {
-            MySocket s = new MySocket("localhost", 12345);
-            
-            // define in out socket streams
-            socketout = s.getPrintWriter();
-            socketin = s.getBufferedReader();
-            
-            // read and send nick
-            
+            String nick = args[2];
+            MySocket s = new MySocket(args[0], Integer.parseInt(args[1]));
+            s.println(nick);
             
             // output thread
             new Thread() {
+                @Override
                 public void run() {
                     String msg;
-                    try {
-                        while ((msg = socketin.readLine()) != null) {
+                        while ((msg = s.readLine()) != null) {
                             // write msg to console
-                            out.println(msg);
+                            System.out.println(msg);
                         }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                        s.close();
                 }                
             }.start();
             
             // input thread
             new Thread() {
+                @Override
                 public void run() {
-                    String linia = null;
+                    String linia = null;       
+                    BufferedReader kbd = new BufferedReader(new InputStreamReader(System.in));
                     try{
-                        linia = in.readLine();
+                        while ((linia = kbd.readLine()) != null) {
+                            // write line to socket
+                            s.println(linia);
+                        }
+                        // close socket for output (CTRL + D) el tancament el controla el thread input
+                        s.shutDownInput();
                     }catch(IOException e){
-                        
+                        e.printStackTrace();
                     }
-                    while (linia != null) {
-                        // write line to socket
-                        s.write(linia);
-                    }
-                    
                 }                
             }.start();
-            
-            // close socket for output
-            s.close();
-            
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

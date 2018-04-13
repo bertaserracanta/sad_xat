@@ -1,5 +1,3 @@
-package practica8;
-
 
 import java.net.*;
 import java.io.*;
@@ -20,7 +18,8 @@ public class MyServerSocket {
         try{
             s = new MySocket(ss.accept());
         }catch(IOException e){
-            
+            System.err.println("Couldn't accept the connection");
+            System.exit(1);
         }
         return s;
     }
