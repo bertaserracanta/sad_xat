@@ -25,7 +25,6 @@ public class Servidor {
                             }else{
                                 //inform user that that nick is already in use
                                 s.println("L'usuari " + nick + " ja existeix, introdueix un altre nick: "); 
-                                //nick = s.readLine();
                             }
                         }while(true);
                         

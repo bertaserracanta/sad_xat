@@ -25,11 +25,7 @@ public class ClientSwing implements ActionListener {
         try{
         javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                //try {
                     createAndShowGUI();
-                //} catch (Exception e) {
-                //    e.printStackTrace();
-                //}
             }
         });
         }catch(Exception e){
@@ -55,12 +51,10 @@ public class ClientSwing implements ActionListener {
         frame = new JFrame("Usuari: " + nick);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(0, 0)); //separacio entre panells
-        //frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS)); per canviar el tipus de Layout de la frame
         frame.getRootPane().setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        // Create an output JPanel and add a JTextArea(20, 30) inside a JScrollPane
         outp = new JPanel();
         outp.setLayout(new BoxLayout(outp, BoxLayout.X_AXIS));
-        messages = new JTextArea(20, 30); //podem treure aixo i fer un setSize de la frame
+        messages = new JTextArea(20, 30); 
         scrollPane = new JScrollPane(messages);
         messages.setEditable(false);
         outp.add(scrollPane, BorderLayout.WEST);
@@ -72,16 +66,11 @@ public class ClientSwing implements ActionListener {
 
         outp.add(listScrollPane, BorderLayout.EAST);
 
-        /*
-         definir proporcions entre widgets: gridbagLayout
-        
-        mirar MigLayout
-        DesignGridLayout
-         */
+
         // Create an input JPanel and add a JTextField(25) and a JButton
         inp = new JPanel();
-        inp.setLayout(new BoxLayout(inp, BoxLayout.LINE_AXIS));//per ferlo horitzontal
-        entry = new JTextField(25); //podem treure aixo i fer un setSize de la frame
+        inp.setLayout(new BoxLayout(inp, BoxLayout.LINE_AXIS));
+        entry = new JTextField(25);
         send = new JButton("Send");
 
         inp.add(entry);
@@ -91,14 +80,12 @@ public class ClientSwing implements ActionListener {
         entry.addActionListener(this);
         send.addActionListener(this);
 
-        //inp.setMaximumSize(new Dimension(inp.getMaximumSize().width, inp.getMinimumSize().height));//limitem l'altura del panell de input a la seva miniima
         // add panels to main frame
         frame.add(outp, BorderLayout.CENTER);
         frame.add(inp, BorderLayout.PAGE_END);
 
         //Display the window centered.
-        frame.pack();//podem treure aixo i fer un setSize de la frame
-        //frame.setSize(400,600);
+        frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
@@ -118,7 +105,7 @@ public class ClientSwing implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        //Guardem el text de entry, l'esborrem i l'afegim al textAtrea (missatges) i s'envia pel socket.
+        //Guardem el text de entry, l'esborrem, l'afegim al textAtrea (missatges) i s'envia pel socket.
         String message = entry.getText();
         entry.setText("");
         messages.append(message + "\n");
@@ -127,7 +114,7 @@ public class ClientSwing implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new ClientSwing(new MySocket(args[0], Integer.parseInt(args[1])), args[2]);
+        new ClientSwing(new MySocket(args[0], Integer.parseInt(args[1])), args[2]); //ip, port, nick
     }
 }
 
