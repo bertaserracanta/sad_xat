@@ -24,16 +24,22 @@ public class Servidor {
                                 break;
                             }else{
                                 //inform user that that nick is already in use
-                                s.println("L'usuari: " + nick + " ja existeix, introdueix un altre nick: "); 
+                                s.println("L'usuari " + nick + " ja existeix, introdueix un altre nick: "); 
                                 //nick = s.readLine();
                             }
                         }while(true);
+                        
+                        //inform user about the other users connected
+                        String users =  m.keySet().toString();
+                        s.println("Usuaris connectats: " + users);
+                        
                         m.putIfAbsent(nick, s); 
                         
                         // inform users about a new user joining and add user
                         for(MySocket s : m.values()){
-                            s.println("L'usuari: " + nick + " s'ha unit");
+                            s.println("L'usuari " + nick + " s'ha unit");
                         }
+
                     }
     
                     void disconnect() {
@@ -55,11 +61,11 @@ public class Servidor {
                     public void run() {
                             connect();
                             String msg;
-                            while ((msg = s.readLine()) != null) { //sha d'estar connectat mentre el client no envii ctrl D
+                            while ((msg = s.readLine()) != null) { 
                                 broadcast(s, msg);
                             }
                             disconnect();
-                            s.close();       //no se si va aqui, o dins del disconect un metode qeu tanqui avisant l'output thread del client                     
+                            s.close();       
                     }
                 }).start();
             }
